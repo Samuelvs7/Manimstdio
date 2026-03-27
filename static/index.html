@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Animation Studio — Professional Edition</title>
+    <meta name="description" content="Write, render, and preview Manim animations in a professional IDE.">
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- ===== INTRO SPLASH SCREEN ===== -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
+                    <defs>
+                        <linearGradient id="splash-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1"/>
+                            <stop offset="50%" style="stop-color:#a855f7"/>
+                            <stop offset="100%" style="stop-color:#f97316"/>
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <polygon points="50,5 95,90 5,90" stroke="url(#splash-grad)" stroke-width="3" fill="none" filter="url(#glow)" class="splash-triangle"/>
+                    <polygon points="50,25 78,75 22,75" stroke="url(#splash-grad)" stroke-width="2" fill="none" opacity="0.5" class="splash-triangle-inner"/>
+                    <circle cx="50" cy="55" r="8" fill="url(#splash-grad)" class="splash-dot"/>
+                </svg>
+            </div>
+            <h1 class="splash-title">VS Animation Studio</h1>
+            <p class="splash-subtitle">Professional Edition</p>
+            <div class="splash-loader">
+                <div class="splash-loader-bar"></div>
+            </div>
+            <p class="splash-status">Initializing workspace...</p>
+        </div>
+    </div>
+
+    <!-- ===== TOP NAVBAR ===== -->
+    <nav id="navbar">
+        <div class="nav-left">
+            <div class="app-logo">
+                <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1"/>
+                            <stop offset="50%" style="stop-color:#a855f7"/>
+                            <stop offset="100%" style="stop-color:#f97316"/>
+                        </linearGradient>
+                    </defs>
+                    <polygon points="50,8 92,88 8,88" stroke="url(#logo-grad)" stroke-width="5" fill="none" class="logo-pulse"/>
+                    <circle cx="50" cy="55" r="6" fill="url(#logo-grad)"/>
+                </svg>
+            </div>
+            <div class="app-title">
+                <span class="title-main">VS Animation Studio</span>
+                <span class="title-edition">Professional Edition v1.0.0</span>
+            </div>
+            <span id="unsaved-indicator" class="unsaved-dot" style="display:none;">● Unsaved changes</span>
+        </div>
+        <div class="nav-center">
+            <button class="nav-btn" id="btn-new" title="New File (Ctrl+N)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                New
+            </button>
+            <button class="nav-btn" id="btn-open" title="Open File (Ctrl+O)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                Open
+            </button>
+            <button class="nav-btn" id="btn-save" title="Save File (Ctrl+S)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save
+            </button>
+            <div class="nav-divider"></div>
+            <button class="nav-btn btn-render" id="btn-render" title="Full Render (Ctrl+Shift+Enter)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Render
+            </button>
+            <button class="nav-btn btn-preview" id="btn-preview" title="Quick Preview (Ctrl+Enter)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                Preview
+            </button>
+        </div>
+        <div class="nav-right">
+            <div class="toggle-group">
+                <button class="toggle-btn" id="toggle-latex" title="LaTeX Support">
+                    LaTeX <span class="toggle-status on">✓</span>
+                </button>
+            </div>
+            <!-- Theme Dropdown -->
+            <div class="theme-dropdown" id="theme-dropdown">
+                <button class="icon-btn" id="btn-theme" title="Change Theme">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0 0 14h.5"/><path d="M12 16a7 7 0 0 0 0-14"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <div class="theme-menu" id="theme-menu">
+                    <button class="theme-option active" data-theme="dark">
+                        <span class="theme-swatch dark-swatch"></span>
+                        Dark Theme
+                    </button>
+                    <button class="theme-option" data-theme="light">
+                        <span class="theme-swatch light-swatch"></span>
+                        Light Theme
+                    </button>
+                    <button class="theme-option" data-theme="neon">
+                        <span class="theme-swatch neon-swatch"></span>
+                        Neon Theme
+                    </button>
+                </div>
+            </div>
+            <button class="icon-btn" id="btn-settings" title="Settings">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            <!-- Connection Status -->
+            <div class="status-dot" id="connection-status" title="Connected">
+                <span class="dot green"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== RENDER PROGRESS BAR ===== -->
+    <div id="render-progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- ===== MAIN CONTENT WRAPPER ===== -->
+    <div id="app-wrapper">
+        <!-- ===== MAIN LAYOUT ===== -->
+        <div id="main-layout">
+            <!-- LEFT: Code Editor -->
+            <div id="editor-panel" class="panel glass-panel">
+                <div class="panel-header">
+                    <span class="panel-icon">&lt;/&gt;</span>
+                    <span class="panel-title">Code Editor</span>
+                    <div class="editor-toolbar">
+                        <label class="toolbar-label">Scene:</label>
+                        <select id="scene-selector" class="toolbar-select">
+                            <option value="">Auto-detect</option>
+                        </select>
+                        <label class="toolbar-label">Font:</label>
+                        <select id="font-size-selector" class="toolbar-select">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                            <option value="20">20px</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="monaco-editor"></div>
+            </div>
+
+            <!-- CENTER-RIGHT: Preview -->
+            <div id="preview-panel" class="panel glass-panel">
+                <div class="panel-header">
+                    <span class="panel-icon">◉</span>
+                    <span class="panel-title">Preview</span>
+                </div>
+                <div id="preview-content">
+                    <div id="preview-placeholder">
+                        <div class="placeholder-icon">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.4">
+                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                                <line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="22" y2="7"/>
+                                <line x1="2" y1="17" x2="22" y2="17"/>
+                            </svg>
+                        </div>
+                        <h3>No Preview</h3>
+                        <p>Render or preview an animation</p>
+                    </div>
+                    <div id="preview-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Rendering animation...</p>
+                    </div>
+                    <video id="preview-video" style="display:none;" controls autoplay loop></video>
+                </div>
+            </div>
+
+            <!-- RIGHT: Render Controls -->
+            <div id="controls-panel" class="panel glass-panel">
+                <div class="panel-header">
+                    <span class="panel-icon">⚙</span>
+                    <span class="panel-title">Render Controls</span>
+                </div>
+                <div class="controls-content">
+                    <div class="control-section">
+                        <h4 class="section-title"><span class="section-icon pulse-green">●</span> QUICK PREVIEW</h4>
+                        <div class="control-group">
+                            <label>QUALITY</label>
+                            <select id="preview-quality" class="control-select"><option value="l" selected>480p</option><option value="m">720p</option><option value="h">1080p</option></select>
+                        </div>
+                        <div class="control-group">
+                            <label>FPS</label>
+                            <select id="preview-fps" class="control-select"><option value="15" selected>15</option><option value="30">30</option><option value="60">60</option></select>
+                        </div>
+                    </div>
+                    <div class="control-section">
+                        <h4 class="section-title"><span class="section-icon pulse-blue">■</span> FINAL RENDER</h4>
+                        <div class="control-group">
+                            <label>QUALITY</label>
+                            <select id="render-quality" class="control-select"><option value="l">480p</option><option value="m">720p</option><option value="h" selected>1080p</option></select>
+                        </div>
+                        <div class="control-group">
+                            <label>FPS</label>
+                            <select id="render-fps" class="control-select"><option value="15">15</option><option value="30">30</option><option value="60" selected>60</option></select>
+                        </div>
+                        <div class="control-group">
+                            <label>FORMAT</label>
+                            <select id="render-format" class="control-select"><option value="mp4" selected>MP4</option><option value="gif">GIF</option></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RESIZE HANDLE ===== -->
+        <div id="resize-handle">
+            <div class="handle-grip"></div>
+        </div>
+
+        <!-- ===== BOTTOM: Console ===== -->
+        <div id="console-panel" class="panel glass-panel">
+            <div class="panel-header console-header">
+                <span class="panel-icon">❯_</span>
+                <span class="panel-title">Console & Terminal</span>
+                <div class="console-actions">
+                    <span class="console-status">Status: <span id="render-status" class="status-ready">Ready</span></span>
+                    <button class="icon-btn-sm" id="btn-copy-logs" title="Copy Logs">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    </button>
+                    <button class="icon-btn-sm" id="btn-clear-console" title="Clear Console">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="console-output"></div>
+        </div>
+    </div>
+
+    <!-- Monaco Editor CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script src="/static/app.js?v=2"></script>
+</body>
+</html>
