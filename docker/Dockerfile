@@ -85,4 +85,4 @@ WORKDIR ${HOME}
 RUN chown -R ${NB_USER}:${NB_USER} ${HOME} && chmod 777 ${HOME}
 USER ${NB_USER}
 
-CMD ["/bin/bash"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "10000"]
