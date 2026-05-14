@@ -81,8 +81,8 @@ RUN adduser --disabled-password \
     --uid ${NB_UID} \
     ${NB_USER}
 
-WORKDIR ${HOME}
-RUN chown -R ${NB_USER}:${NB_USER} ${HOME} && chmod 777 ${HOME}
+WORKDIR /opt/manim
+
 USER ${NB_USER}
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "10000"]
