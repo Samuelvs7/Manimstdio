@@ -1,5 +1,5 @@
 # ── Stage 1: builder ─────────────────────────────────────────────────────────
-FROM python:3.14-slim AS builder
+FROM python:3.11-slim AS builder
 
 RUN apt-get update -qq \
     && apt-get install --no-install-recommends -y \
@@ -39,7 +39,7 @@ WORKDIR /opt/manim
 RUN pip install --no-cache-dir .[jupyterlab]
 
 # ── Stage 2: runtime ─────────────────────────────────────────────────────────
-FROM python:3.14-slim
+FROM python:3.11-slim
 
 # Runtime libs only:
 #  - no ffmpeg: PyAV (av package) bundles its own ffmpeg libraries in av.libs/
