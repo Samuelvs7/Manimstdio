@@ -68,6 +68,10 @@ COPY --from=builder /usr/local/texlive /usr/local/texlive
 # Copy the pre-built virtualenv from builder
 ENV VIRTUAL_ENV=/opt/venv
 COPY --from=builder /opt/venv /opt/venv
+
+# COPY PROJECT FILES
+COPY --from=builder /opt/manim /opt/manim
+
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 ARG NB_USER=manimuser
