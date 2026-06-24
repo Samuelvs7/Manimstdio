@@ -1,7 +1,3 @@
-from fastapi import FastAPI
+"""Entry point — re-exports the FastAPI app from server.server."""
 
-app = FastAPI()
-
-@app.get("/")
-def home():
-    return {"message": "Manim server running"}
+from server.server import app  # noqa: F401

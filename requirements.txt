@@ -1,3 +1,5 @@
 fastapi
 uvicorn
 manim
+python-multipart
+websockets

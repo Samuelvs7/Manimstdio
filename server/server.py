@@ -1,6 +1,8 @@
 """Manim Animation Studio — FastAPI server."""
 
 import json
+import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -9,11 +11,23 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from render_engine import detect_scenes, render_scene
+# Support both `python server/server.py` and `uvicorn server.server:app`
+try:
+    from server.render_engine import detect_scenes, render_scene
+except ImportError:
+    from render_engine import detect_scenes, render_scene
 
 # Paths
 PROJECT_DIR = str(Path(__file__).resolve().parent.parent)
-MANIM_EXE = str(Path(PROJECT_DIR) / ".venv" / "Scripts" / "manim.exe")
+
+# Cross-platform manim executable detection (Windows local dev or Linux Docker)
+_win_exe = Path(PROJECT_DIR) / ".venv" / "Scripts" / "manim.exe"
+_unix_exe = Path(PROJECT_DIR) / ".venv" / "bin" / "manim"
+MANIM_EXE = (
+    str(_win_exe) if _win_exe.exists()
+    else str(_unix_exe) if _unix_exe.exists()
+    else shutil.which("manim") or "manim"
+)
 STATIC_DIR = str(Path(PROJECT_DIR) / "static")
 MEDIA_DIR = str(Path(PROJECT_DIR) / "media")
 
@@ -160,9 +174,10 @@ if __name__ == "__main__":
 
     # Add server directory to path for imports
     sys.path.insert(0, str(Path(__file__).parent))
+    port = int(os.environ.get("PORT", 8000))
     print(f"Manim Studio starting...")
     print(f"  Project dir: {PROJECT_DIR}")
     print(f"  Manim exe:   {MANIM_EXE}")
     print(f"  Static dir:  {STATIC_DIR}")
-    print(f"  Open http://localhost:8000 in your browser")
-    uvicorn.run("server:app", host="0.0.0.0", port=8000, reload=False)
+    print(f"  Open http://localhost:{port} in your browser")
+    uvicorn.run("server:app", host="0.0.0.0", port=port, reload=False)
